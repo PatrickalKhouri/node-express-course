@@ -1,15 +1,34 @@
-const express = require('express');
-const path = require('path');
-const app = express();
+const express = require('express')
+const app = express()
+const {products} = require('./data')
 
-app.use(express.static('./public'));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './navbar-app/index.html'))
+  res.send('<h1>Home Page</h1><a href="/api/products">products</a>')
 })
 
-app.all('*', (req, res) => {
-  res.status(404).send('Not found')
+app.get('/api/products/', (req, res) => {
+  const newProducts = products.map((product) => {
+    const {id, name, image} = product
+    return {id, name, image}
+  })
+  res.json(newProducts)
+})
+
+app.get('/api/products/:productID', (req, res) => {
+  const { productID } = req.params
+  const singleProduct = products.find(
+    (product) => product.id === Number(productID)
+  )
+  if (!singleProduct) {
+    res.status(404).send('Product does not exist')
+  }
+  res.json(singleProduct)
+})
+
+app.get('/api/products/:productID/:reviews/:reviewID', (req, res) => {
+  console.log(req)
+  res.send('Hello world')
 })
 
 app.listen(5000, () => {
