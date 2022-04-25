@@ -1,4 +1,5 @@
 const express = require('express')
+const { restart } = require('nodemon')
 const app = express()
 const {products} = require('./data')
 
@@ -24,6 +25,23 @@ app.get('/api/products/:productID', (req, res) => {
     res.status(404).send('Product does not exist')
   }
   res.json(singleProduct)
+})
+
+app.get('/api/v1/query', (req, res) => {
+  const {search, limit} = req.query;
+  let sortedProduct = [...products];
+  if(search) {
+    sortedProduct = sortedProduct.filter((product) => {
+      return product.name.startsWith(search)
+    })
+  }
+  if (limit) {
+    sortedProduct = sortedProduct.slice(0, Number(limit))
+  }
+  if(sortedProduct < 1) {
+    res.status(200).send('No products found')
+  }
+  res.status(200).json(sortedProduct)
 })
 
 app.get('/api/products/:productID/:reviews/:reviewID', (req, res) => {
