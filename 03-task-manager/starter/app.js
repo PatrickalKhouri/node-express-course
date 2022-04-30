@@ -6,8 +6,9 @@ const bodyParser = require('body-parser')
 require('dotenv').config()
 
 //middleware
-app.use(bodyParser.urlencoded())
-app.use(bodyParser.json())
+app.use(express.static('./public'));
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
 // routes
 

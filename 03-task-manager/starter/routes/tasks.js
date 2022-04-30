@@ -10,6 +10,6 @@ router.route('/:id').get(getTask)
 
 router.route('/:id').patch(updateTask)
 
-router.route('/:id').get(deleteTask)
+router.route('/:id').delete(deleteTask)
 
 module.exports = router

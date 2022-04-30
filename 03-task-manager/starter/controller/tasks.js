@@ -1,24 +1,66 @@
 const Task = require('../models/task');
 
-const getAllTasks = (req,res) => {
-  res.send('All Items')
+const getAllTasks = async (req,res) => {
+  try {
+    tasks = await Task.find({})
+    res.status(200).json({ tasks });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({msg : 'There was an error'})
+  }
 }
 
 const createTask = async (req, res) => {
-  const task = await Task.create(req.body)
-  res.status(201).json({task})
+  try {
+    const task = await Task.create(req.body)
+    res.status(201).json({task})
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({msg : 'There was an error'})
+  }
 }
 
-const getTask = (req,res) => {
-  res.json({id: req.params.id})
+const getTask = async (req,res) => {
+  try {
+    const id = req.params.id
+    task = await Task.findOne({_id: id})
+    if (!task) {
+      return res.status(404).json({msg: `Task of id ${id} was not found`})
+    }
+    res.status(200).json({ task });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({msg : 'There was an error'})
+  }
 }
 
-const updateTask = (req,res) => {
-  res.send('Update task')
+const deleteTask = async (req,res) => {
+  try {
+    const id = req.params.id
+    task = await Task.findOneAndDelete({ _id: id})
+    console.log(task)
+    if (!task) {
+      return res.status(404).json({msg: `Task of id ${id} was not found`})
+    }
+    res.status(200).json({ task });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({msg : 'There was an error'})
+  }
 }
 
-const deleteTask = (req,res) => {
-  res.send('Delete task')
+const updateTask = async (req,res) => {
+  try {
+    const id = req.params.id
+    const data = req.body
+    task = await Task.findOneAndUpdate({_id: id}, data, {new:true, runValidators:true})
+    if (!task) {
+      return res.status(404).json({msg: `Task of id ${id} was not found`})
+    }
+    res.status(200).json({task})
+  } catch (err) {
+    res.status(500).json({msg : 'There was an error'})
+  }
 }
 
 module.exports = {
