@@ -7,7 +7,7 @@ const login = async (req, res) => {
     res.send('logging user')
 }
 
-modele.exports = {
+module.exports = {
     register,
     login
 } 

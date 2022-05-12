@@ -1,0 +1,25 @@
+const mongoose = require('mongoose');
+
+const UserSchema = new mongoose.Schema({
+    name: {
+        type:String,
+        required: [true, 'Please provide a name'],
+        minlength: [3, 'Name should have more than 2 characters'],
+        maxlength: [50, "Name can't exceed more than 50 characters"]
+    },
+    email: {
+        type:String,
+        required: [true, 'Please provide an email'],
+        match: [/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    'Please provide a valid email'],
+        unique: true
+    },
+    password: {
+        type:String,
+        required: [true, 'Please provide a password'],
+        minlength: [6, 'Password should have more than 6 characters'],
+        maxlength: [15, "Password can't exceed more than 12 characters"]
+    },
+})
+
+module.exports = mongoose.model('User', UserSchema)
